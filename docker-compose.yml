@@ -52,6 +52,7 @@ services:
     container_name: mongodb
     ports:
       - "27017:27017"
+    command: ["mongod", "--replSet", "rs0"]
 
   rabbitmq:
     image: rabbitmq:3-management

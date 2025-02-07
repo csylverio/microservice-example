@@ -11,15 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-// Configuração da string de conexão
-builder.Services.AddControllers();
 
+// Configuração da string de conexão
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-// Adiciona o ClienteRepository como um serviço
+
+// mapeia classes para Inversão de dependencia
 builder.Services.AddSingleton<ICustomerRepository>(sp => new CustomerRepository(connectionString));
 builder.Services.AddSingleton<IUserRepository>(sp => new UserRepository(connectionString));
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+builder.Services.AddControllers();
 
 // configuração da autenticacao
 var configuration = new ConfigurationBuilder().AddJsonFile($"appsettings.json").Build();
@@ -42,7 +43,6 @@ builder.Services
         ValidateAudience = false
     };
 });
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Banking System Customer Service", Version = "v1" });
