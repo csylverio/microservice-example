@@ -7,13 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSystem.Services.Cust
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSystem.Services.AccountService", "BankingSystem.Services.AccountService\BankingSystem.Services.AccountService.csproj", "{A7C84992-D1CC-4BB9-928E-309AC6AA41E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSystem.Services.NotificationWorker", "BankingSystem.Services.NotificationWorker\BankingSystem.Services.NotificationWorker.csproj", "{EBFF2B76-CC99-4C21-9BB2-794DC03F18C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6DC7F704-D600-4E70-BABA-821835B75CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -24,5 +23,12 @@ Global
 		{A7C84992-D1CC-4BB9-928E-309AC6AA41E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7C84992-D1CC-4BB9-928E-309AC6AA41E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7C84992-D1CC-4BB9-928E-309AC6AA41E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBFF2B76-CC99-4C21-9BB2-794DC03F18C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBFF2B76-CC99-4C21-9BB2-794DC03F18C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBFF2B76-CC99-4C21-9BB2-794DC03F18C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBFF2B76-CC99-4C21-9BB2-794DC03F18C8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

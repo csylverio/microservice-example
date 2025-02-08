@@ -2,50 +2,55 @@ version: '3.8'
 
 services:
   customer-service:
+    container_name: customer-service
     build: ./Services/CustomerService
     ports:
       - "5001:5000"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      ASPNETCORE_ENVIRONMENT: Development
     depends_on:
-      - sqlserver
+      - postgresql
+      - rabbitmq
 
   account-service:
+    container_name: account-service
     build: ./Services/AccountService
     ports:
       - "5002:5000"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      ASPNETCORE_ENVIRONMENT: Development
     depends_on:
       - mongodb
       - rabbitmq
 
   notification-service:
+    container_name: notification-service
     build: ./Services/NotificationService
     ports:
       - "5003:5000"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      ASPNETCORE_ENVIRONMENT: Development
+      RabbitMQ__HostName: rabbitmq
     depends_on:
       - rabbitmq
 
   loan-service:
+    container_name: loan-service
     build: ./Services/LoanService
     ports:
       - "5004:5000"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      ASPNETCORE_ENVIRONMENT: Development
     depends_on:
-      - sqlserver
+      - postgresql
 
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
     ports:
-      - "1433:1433"
+      - "5432:5432"
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=YourStrongPassword123
+      POSTGRES_PASSWORD: 102030
 
   mongodb:
     image: mongo:5.0
@@ -53,6 +58,9 @@ services:
     ports:
       - "27017:27017"
     command: ["mongod", "--replSet", "rs0"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: 102030
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -60,3 +68,6 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: 102030

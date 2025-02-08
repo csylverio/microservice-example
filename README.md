@@ -42,7 +42,7 @@ BankingSystem/
 ### **Arquitetura**
 
 - **Arquitetura do software:** Microserviços
-- **Padrão arquitetural:** DDD, Event-Driven Architecture
+- **Padrão arquitetural:** DDD, Layered architecture, Event-Driven Architecture
 - **Comunicação:**
     - Sincrona: HTTP
     - Assíncrona: RabbitMQ para eventos de transação e notificações
