@@ -1,27 +1,17 @@
 using System;
 using System.Text;
-using BankingSystem.Services.CustomerService.Domain;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 
 namespace BankingSystem.Services.CustomerService.Services;
 
-public class NotificationService : INotificationService
+public class MessagerService : IMessagerService
 {
-    private const string _queueEmail = "email_notifications";
-    private const string _queueSms = "sms_notifications";
-
-    public async Task SendEmailAsync(EmailNotification emailNotification)
+    public MessagerService()
     {
-        await PublishMessageAsync(_queueEmail, emailNotification.ToJson());
     }
 
-    public async Task SendSmsAsync(SmsNotification smsNotification)
-    {
-        await PublishMessageAsync(_queueSms, smsNotification.ToJson());
-    }
-
-    private static async Task PublishMessageAsync(string queue, string body)
+    public async Task PublishMessageAsync(string queue, string body)
     {
         try
         {
@@ -32,7 +22,7 @@ public class NotificationService : INotificationService
             await channel.QueueDeclareAsync(queue, durable: true, exclusive: false, autoDelete: false);
 
             byte[] messageBodyBytes = Encoding.UTF8.GetBytes(body);
-            await channel.BasicPublishAsync("", queue, false,  new BasicProperties(), messageBodyBytes);
+            await channel.BasicPublishAsync("", queue, false, new BasicProperties(), messageBodyBytes);
         }
         catch (PublishException ex)
         {

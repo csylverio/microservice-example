@@ -18,7 +18,7 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 // mapeia classes para Inversão de dependencia
 builder.Services.AddSingleton<ICustomerRepository>(sp => new CustomerRepository(connectionString));
 builder.Services.AddSingleton<IUserRepository>(sp => new UserRepository(connectionString));
-builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IMessagerService, MessagerService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
