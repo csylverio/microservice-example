@@ -6,9 +6,10 @@ namespace BankingSystem.Services.CustomerService.Services;
 
 public class CustomerService : ICustomerService
 {
+    // adicionar configurações no appsettings.json
     private const string _emailQueue = "email_notifications";
     private const string _smsQueue = "sms_notifications";
-    private const string _accountQueue = "account_notifications";
+    private const string baseUrl = "https://localhost:5001";
 
     private readonly ICustomerRepository _customerRepository;
     private readonly IMessagerService _messagerService;
@@ -40,12 +41,13 @@ public class CustomerService : ICustomerService
         };
         await _messagerService.PublishMessageAsync(_smsQueue, smsNotification.ToJson());
 
-        // dispara notificação para criar conta
-        AccountNotification accountNotification = new()
+        // realiza chamada HTTP para API Account Service
+        using var httpClient = new HttpClient();
+        var response = await httpClient.GetAsync($"{baseUrl}/api/Account/{customer.Id.ToString()}");
+        if (!response.IsSuccessStatusCode)
         {
-            AccountNumber = customer.Id.ToString()
-        };
-        await _messagerService.PublishMessageAsync(_accountQueue, accountNotification.ToJson());
+            throw new InvalidOperationException($"Erro ao criar conta para o cliente. StatusCode:{response.StatusCode}, {await response.Content.ReadAsStringAsync()}");
+        }
     }
 
     public async Task<IEnumerable<Customer>> GetAllAsync()
