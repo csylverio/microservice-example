@@ -17,7 +17,7 @@ public class CustomerRepository : ICustomerRepository
     public async Task AddAsync(Customer customer)
     {
         var query = @"INSERT INTO Customer (Id, Name, Email, DocumentNumber, PhoneNumber, Address, City, State, Country, PostalCode, CreatedAt, IsActive) 
-                      VALUES (@Id, @Name, @Email, @DocumentNumber, @PhoneNumber, @Address, @City, @State, @Country, @PostalCode, @CreateAt, @IsActive)";
+                      VALUES (@Id, @Name, @Email, @DocumentNumber, @PhoneNumber, @Address, @City, @State, @Country, @PostalCode, @CreatedAt, @IsActive)";
         customer.Id = Guid.NewGuid();
 
         using var connection = new NpgsqlConnection(_connectionString);
@@ -69,11 +69,21 @@ public class CustomerRepository : ICustomerRepository
                          State = @State, 
                          Country = @Country, 
                          PostalCode = @PostalCode,
+                         UpdatedAt = @UpdatedAt
                          IsActive = @IsActive
                      WHERE Id = @Id";
 
         using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync();
         await connection.ExecuteAsync(query, customer);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var query = @"DELETE FROM Customer WHERE Id = @Id";
+
+        using var connection = new NpgsqlConnection(_connectionString);
+        await connection.OpenAsync();
+        await connection.ExecuteAsync(query, new { Id = id });
     }
 }

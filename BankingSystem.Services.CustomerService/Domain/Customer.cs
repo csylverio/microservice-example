@@ -15,7 +15,7 @@ public class Customer
     public string Country { get; set; }
     public string PostalCode { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
     public bool IsActive { get; set; }
 
 }

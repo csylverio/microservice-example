@@ -1,6 +1,6 @@
 using System;
 
-namespace BankingSystem.Services.NotificationWorker.Models;
+namespace BankingSystem.Services.NotificationWorker.Domain.Sms;
 
 public class SmsNotification
 {

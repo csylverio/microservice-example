@@ -1,4 +1,4 @@
-using BankingSystem.Services.NotificationWorker.Models;
+using BankingSystem.Services.NotificationWorker.Domain.Sms;
 
 namespace BankingSystem.Services.NotificationWorker.Services;
 

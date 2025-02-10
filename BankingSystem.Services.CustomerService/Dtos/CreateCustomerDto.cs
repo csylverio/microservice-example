@@ -27,7 +27,27 @@ public class CreateCustomerDto
             City = City,
             State = State,
             Country = Country,
-            PostalCode = PostalCode
+            PostalCode = PostalCode,
+            CreatedAt = DateTime.UtcNow
+        };
+    }
+
+    internal Customer ToCustomer(Customer existingCustomer)
+    {
+        return new Customer
+        {
+            Id = existingCustomer.Id,
+            Name = Name,
+            Email = Email,
+            DocumentNumber = DocumentNumber,
+            PhoneNumber = PhoneNumber,
+            Address = Address,
+            City = City,
+            State = State,
+            Country = Country,
+            PostalCode = PostalCode,
+            CreatedAt = existingCustomer.CreatedAt,
+            UpdatedAt = DateTime.UtcNow
         };
     }
 }

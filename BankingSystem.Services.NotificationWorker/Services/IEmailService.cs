@@ -1,5 +1,5 @@
 using System;
-using BankingSystem.Services.NotificationWorker.Models;
+using BankingSystem.Services.NotificationWorker.Domain.Email;
 
 namespace BankingSystem.Services.NotificationWorker.Services;
 

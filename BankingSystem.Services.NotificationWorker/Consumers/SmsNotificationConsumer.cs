@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 using System.Text.Json;
-using BankingSystem.Services.NotificationWorker.Models;
+using BankingSystem.Services.NotificationWorker.Domain.Sms;
 using BankingSystem.Services.NotificationWorker.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -35,7 +35,10 @@ public class SmsNotificationConsumer : ISmsNotificationConsumer
                 {
                     var body = eventArgs.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
-                    var smsNotification = JsonSerializer.Deserialize<SmsNotification>(message);
+                    var smsNotification = JsonSerializer.Deserialize<SmsNotification>(message, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true // Permite ignorar diferenças entre PascalCase e camelCase
+                    });
 
                     if (smsNotification == null || string.IsNullOrEmpty(smsNotification.PhoneNumber) ||
                         string.IsNullOrEmpty(smsNotification.Message))

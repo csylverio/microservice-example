@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using BankingSystem.Services.NotificationWorker.Models;
+using BankingSystem.Services.NotificationWorker.Domain.Email;
 using BankingSystem.Services.NotificationWorker.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -34,10 +34,13 @@ public class EmailNotificationConsumer : IEmailNotificationConsumer
                 {
                     var body = eventArgs.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
-                    var emailNotification = JsonSerializer.Deserialize<EmailNotification>(message);
+                    var emailNotification = JsonSerializer.Deserialize<EmailNotification>(message, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true // Permite ignorar diferenças entre PascalCase e camelCase
+                    });
 
-                    if (emailNotification == null || string.IsNullOrEmpty(emailNotification.To) ||
-                        string.IsNullOrEmpty(emailNotification.Subject) || string.IsNullOrEmpty(emailNotification.Body))
+                    if (emailNotification == null || string.IsNullOrEmpty(emailNotification.CustomerName) ||
+                        string.IsNullOrEmpty(emailNotification.EmailAddress))
                     {
                         Console.WriteLine($"Invalid email notification received: {message}");
                         return;

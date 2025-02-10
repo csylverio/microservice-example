@@ -1,13 +1,12 @@
 using System;
 using BankingSystem.Services.CustomerService.Domain;
 
-namespace BankingSystem.Services.CustomerService.Repositories;
+namespace BankingSystem.Services.CustomerService.Services;
 
-public interface ICustomerRepository
+public interface ICustomerService
 {
     Task AddAsync(Customer customer);
     Task<Customer?> GetByIdAsync(Guid id);
     Task<IEnumerable<Customer>> GetAllAsync();
     Task UpdateAsync(Customer customer);
-    Task DeleteAsync(Guid id);
 }
