@@ -12,7 +12,7 @@ jobs:
     env:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-      DOCKER_HUB_REPO: csylverio/microservice-example
+      DOCKER_HUB_REPO: csylverio
 
     steps:
     # Step 1 - Checkout the repository
