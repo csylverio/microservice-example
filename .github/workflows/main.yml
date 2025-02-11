@@ -1,0 +1,53 @@
+name: Build and Publish Docker Images
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+      DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      DOCKER_HUB_REPO: csylverio/microservice-example
+
+    steps:
+    # Step 1 - Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2 - Setup .NET environment
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+
+    # Step 3 - Login to Docker Hub
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+    # Step 4 - Build and Push CustomerService
+    - name: Build and push CustomerService
+      run: |
+        docker build -t $DOCKER_HUB_REPO/customer-service:latest ./Services/CustomerService
+        docker push $DOCKER_HUB_REPO/customer-service:latest
+
+    # Step 5 - Build and Push AccountService
+    - name: Build and push AccountService
+      run: |
+        docker build -t $DOCKER_HUB_REPO/account-service:latest ./Services/AccountService
+        docker push $DOCKER_HUB_REPO/account-service:latest
+
+    # Step 6 - Build and Push LoanService
+    - name: Build and push LoanService
+      run: |
+        docker build -t $DOCKER_HUB_REPO/loan-service:latest ./Services/LoanService
+        docker push $DOCKER_HUB_REPO/loan-service:latest
+
+    # Step 7 - Build and Push NotificationWorker
+    - name: Build and push NotificationWorker
+      run: |
+        docker build -t $DOCKER_HUB_REPO/notification-worker:latest ./Services/NotificationWorker
+        docker push $DOCKER_HUB_REPO/notification-worker:latest
