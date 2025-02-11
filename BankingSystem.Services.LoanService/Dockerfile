@@ -9,16 +9,16 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copie apenas o arquivo de projeto (para aproveitar o cache durante o restore)
-COPY ["BankingSystem.Services.AccountService.csproj", "AccountService/"]
-RUN dotnet restore "AccountService/BankingSystem.Services.AccountService.csproj"
+COPY ["BankingSystem.Services.LoanService.csproj", "LoanService/"]
+RUN dotnet restore "LoanService/BankingSystem.Services.LoanService.csproj"
 
 # Copie o restante do código e compile a aplicação
-WORKDIR "/src/AccountService"
+WORKDIR "/src/LoanService"
 COPY . .
-RUN dotnet publish "BankingSystem.Services.AccountService.csproj" -c Release -o /app/publish --no-restore
+RUN dotnet publish "BankingSystem.Services.LoanService.csproj" -c Release -o /app/publish --no-restore
 
 # Imagem final de runtime
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "BankingSystem.Services.AccountService.dll"]
+ENTRYPOINT ["dotnet", "BankingSystem.Services.LoanService.dll"]
