@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build-and-publish:
@@ -31,23 +32,23 @@ jobs:
     # Step 4 - Build and Push CustomerService
     - name: Build and push CustomerService
       run: |
-        docker build -t $DOCKER_HUB_REPO/customer-service:latest ./Services/CustomerService
+        docker build -t $DOCKER_HUB_REPO/customer-service:latest ./BankingSystem.Services.CustomerService
         docker push $DOCKER_HUB_REPO/customer-service:latest
 
     # Step 5 - Build and Push AccountService
     - name: Build and push AccountService
       run: |
-        docker build -t $DOCKER_HUB_REPO/account-service:latest ./Services/AccountService
+        docker build -t $DOCKER_HUB_REPO/account-service:latest ./BankingSystem.Services.AccountService
         docker push $DOCKER_HUB_REPO/account-service:latest
 
     # Step 6 - Build and Push LoanService
     - name: Build and push LoanService
       run: |
-        docker build -t $DOCKER_HUB_REPO/loan-service:latest ./Services/LoanService
+        docker build -t $DOCKER_HUB_REPO/loan-service:latest ./BankingSystem.Services.LoanService    
         docker push $DOCKER_HUB_REPO/loan-service:latest
 
     # Step 7 - Build and Push NotificationWorker
     - name: Build and push NotificationWorker
       run: |
-        docker build -t $DOCKER_HUB_REPO/notification-worker:latest ./Services/NotificationWorker
+        docker build -t $DOCKER_HUB_REPO/notification-worker:latest ./BankingSystem.Services.NotificationWorker
         docker push $DOCKER_HUB_REPO/notification-worker:latest
