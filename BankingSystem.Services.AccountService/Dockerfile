@@ -1,25 +1,23 @@
-# Use a imagem oficial do runtime ASP.NET Core 8.0 como base
+# Imagem base de runtime para ASP.NET Core 8.0
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 5000
+EXPOSE 5002
+ENV ASPNETCORE_URLS=http://+:5002
 
-# Use a imagem oficial do SDK do .NET 8 para compilar o projeto
+# Imagem de build para compilar e publicar o projeto
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copie os arquivos do projeto e restaure as dependências
-COPY . .
+# Copie apenas o arquivo de projeto (para aproveitar o cache durante o restore)
+COPY ["AccountService/AccountService.csproj", "AccountService/"]
 RUN dotnet restore "AccountService/AccountService.csproj"
 
-# Compile a aplicação em modo Release
-RUN dotnet build "AccountService/AccountService.csproj" -c Release -o /app/build
+# Copie o restante do código e compile a aplicação
+COPY . .
+RUN dotnet publish "AccountService/AccountService.csproj" -c Release -o /app/publish --no-restore
 
-# Publique a aplicação em um diretório para execução final
-FROM build AS publish
-RUN dotnet publish "AccountService/AccountService.csproj" -c Release -o /app/publish
-
-# Use a imagem base novamente para criar a imagem final de runtime
+# Imagem final de runtime
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "AccountService.dll"]

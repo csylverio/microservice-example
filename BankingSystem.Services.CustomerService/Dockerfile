@@ -1,21 +1,23 @@
 # Imagem base de runtime para .NET 8
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 5000
+EXPOSE 5001
+ENV ASPNETCORE_URLS=http://+:5001
 
-# Imagem de build para compilar a aplicação com o SDK do .NET 8
+# Imagem de build para compilar a aplicação
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY . .
+
+# Copia apenas arquivos necessários para o restore
+COPY ["CustomerService/CustomerService.csproj", "CustomerService/"]
 RUN dotnet restore "CustomerService/CustomerService.csproj"
-RUN dotnet build "CustomerService/CustomerService.csproj" -c Release -o /app/build
 
-# Etapa de publicação dos binários
-FROM build AS publish
-RUN dotnet publish "CustomerService/CustomerService.csproj" -c Release -o /app/publish
+# Copia o restante do código e executa o build e publish em um único comando
+COPY . .
+RUN dotnet publish "CustomerService/CustomerService.csproj" -c Release -o /app/publish --no-restore
 
-# Imagem final de runtime para executar a aplicação
+# Imagem final de runtime
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "CustomerService.dll"]
