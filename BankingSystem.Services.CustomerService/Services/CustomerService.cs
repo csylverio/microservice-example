@@ -9,7 +9,7 @@ public class CustomerService : ICustomerService
     // adicionar configurações no appsettings.json
     private const string _emailQueue = "email_notifications";
     private const string _smsQueue = "sms_notifications";
-    private const string baseUrl = "https://localhost:5001";
+    private const string accountServiceUrl = "https://localhost:5002";
 
     private readonly ICustomerRepository _customerRepository;
     private readonly IMessagerService _messagerService;
@@ -43,7 +43,7 @@ public class CustomerService : ICustomerService
 
         // realiza chamada HTTP para API Account Service
         using var httpClient = new HttpClient();
-        var response = await httpClient.GetAsync($"{baseUrl}/api/Account/{customer.Id.ToString()}");
+        var response = await httpClient.GetAsync($"{accountServiceUrl}/api/Account/{customer.Id.ToString()}");
         if (!response.IsSuccessStatusCode)
         {
             throw new InvalidOperationException($"Erro ao criar conta para o cliente. StatusCode:{response.StatusCode}, {await response.Content.ReadAsStringAsync()}");

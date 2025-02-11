@@ -16,19 +16,23 @@ BankingSystem/
  ├── docker-compose.yml          # Arquivo para orquestrar os serviços no Docker
  ├── Services/                   # Diretório de microserviços
  │    ├── CustomerService/       # Serviço de Cadastro de Clientes
- │    │    ├── CustomerService.Api/        # Projeto Web API
- │    │    ├── CustomerService.Domain/     # Lógica de Domínio
+ │    │    ├── CustomerService.Api/          # Projeto Web API
+ |    |    ├── CustomerService.Application/  # Lógica de Aplicação
+ │    │    ├── CustomerService.Domain/       # Lógica de Domínio
  │    │    └── CustomerService.Infrastructure/ # Repositórios e Acesso a Dados
  │    ├── AccountService/        # Serviço de Conta Corrente
  │    │    ├── AccountService.Api/
+ |    |    ├── AccountService.Application/  
  │    │    ├── AccountService.Domain/
  │    │    └── AccountService.Infrastructure/
  │    ├── NotificationService/   # Serviço de Notificações
  │    │    ├── NotificationService.Api/
+ |    |    ├── NotificationService.Application/  
  │    │    ├── NotificationService.Domain/
  │    │    └── NotificationService.Infrastructure/
  │    └── LoanService/           # Serviço de Empréstimos
  │         ├── LoanService.Api/
+ |    |    ├── LoanService.Application/  
  │         ├── LoanService.Domain/
  │         └── LoanService.Infrastructure/
  └── Infrastructure/             # Código compartilhado entre serviços
