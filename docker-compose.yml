@@ -3,7 +3,7 @@ version: '3.8'
 services:
   customer-service:
     container_name: customer-service
-    build: ./Services/CustomerService
+    image: csylverio/customer-service:latest
     ports:
       - "5001:5000"
     environment:
@@ -11,10 +11,12 @@ services:
     depends_on:
       - postgresql
       - rabbitmq
+    networks:
+      - app-network
 
   account-service:
     container_name: account-service
-    build: ./Services/AccountService
+    image: csylverio/account-service:latest
     ports:
       - "5002:5000"
     environment:
@@ -22,10 +24,12 @@ services:
     depends_on:
       - mongodb
       - rabbitmq
+    networks:
+      - app-network
 
-  notification-service:
-    container_name: notification-service
-    build: ./Services/NotificationService
+  notification-worker:
+    container_name: notification-worker
+    image: csylverio/notification-worker:latest
     ports:
       - "5003:5000"
     environment:
@@ -33,16 +37,18 @@ services:
       RabbitMQ__HostName: rabbitmq
     depends_on:
       - rabbitmq
+    networks:
+      - app-network
 
   loan-service:
     container_name: loan-service
-    build: ./Services/LoanService
+    image: csylverio/loan-service:latest
     ports:
       - "5004:5000"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-    depends_on:
-      - postgresql
+    networks:
+      - app-network
 
   postgresql:
     image: postgres:latest
@@ -51,6 +57,8 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: 102030
+    networks:
+      - app-network
 
   mongodb:
     image: mongo:5.0
@@ -61,6 +69,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: 102030
+    networks:
+      - app-network
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -71,3 +81,9 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: rabbitmq
       RABBITMQ_DEFAULT_PASS: 102030
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
