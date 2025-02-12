@@ -69,7 +69,7 @@ public class CustomerRepository : ICustomerRepository
                          State = @State, 
                          Country = @Country, 
                          PostalCode = @PostalCode,
-                         UpdatedAt = @UpdatedAt
+                         UpdatedAt = @UpdatedAt,
                          IsActive = @IsActive
                      WHERE Id = @Id";
 

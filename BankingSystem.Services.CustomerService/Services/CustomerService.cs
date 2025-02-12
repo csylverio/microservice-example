@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+using System.Text.Json;
 using BankingSystem.Services.CustomerService.Domain;
 using BankingSystem.Services.CustomerService.Repositories;
 
@@ -9,7 +11,7 @@ public class CustomerService : ICustomerService
     // adicionar configurações no appsettings.json
     private const string _emailQueue = "email_notifications";
     private const string _smsQueue = "sms_notifications";
-    private const string accountServiceUrl = "https://localhost:5002";
+    private const string accountServiceUrl = "http://account-service:5000";
 
     private readonly ICustomerRepository _customerRepository;
     private readonly IMessagerService _messagerService;
@@ -25,6 +27,7 @@ public class CustomerService : ICustomerService
         await _customerRepository.AddAsync(customer);
 
         // dispara notificação de email
+        Console.WriteLine("Disparando notificação de email - Customer Create");
         EmailNotification emailNotification = new()
         {
             EmailAddress = customer.Email,
@@ -34,6 +37,7 @@ public class CustomerService : ICustomerService
         await _messagerService.PublishMessageAsync(_emailQueue, emailNotification.ToJson());
 
         // dispara notificação de sms
+        Console.WriteLine("Disparando notificação de sms - Customer Create");
         SmsNotification smsNotification = new()
         {
             PhoneNumber = customer.PhoneNumber,
@@ -42,8 +46,16 @@ public class CustomerService : ICustomerService
         await _messagerService.PublishMessageAsync(_smsQueue, smsNotification.ToJson());
 
         // realiza chamada HTTP para API Account Service
+        Console.WriteLine("Criando conta para o cliente - API Account Service");
+        var requestBody = new
+        {
+            accountNumber = customer.Id.ToString(),
+            initialBalance = 0
+        };
+        var json = JsonSerializer.Serialize(requestBody);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
         using var httpClient = new HttpClient();
-        var response = await httpClient.GetAsync($"{accountServiceUrl}/api/Account/{customer.Id.ToString()}");
+        var response = await httpClient.PostAsync($"{accountServiceUrl}/api/Account", content);
         if (!response.IsSuccessStatusCode)
         {
             throw new InvalidOperationException($"Erro ao criar conta para o cliente. StatusCode:{response.StatusCode}, {await response.Content.ReadAsStringAsync()}");
@@ -65,6 +77,7 @@ public class CustomerService : ICustomerService
         await _customerRepository.UpdateAsync(customer);
 
         // dispara notificação de email
+        Console.WriteLine("Disparando notificação de email - Customer Update");
         EmailNotification emailNotification = new()
         {
             EmailAddress = customer.Email,
@@ -74,6 +87,7 @@ public class CustomerService : ICustomerService
         await _messagerService.PublishMessageAsync(_emailQueue, emailNotification.ToJson());
 
         // dispara notificação de sms
+        Console.WriteLine("Disparando notificação de sms - Customer Update");
         SmsNotification smsNotification = new()
         {
             PhoneNumber = customer.PhoneNumber,

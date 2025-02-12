@@ -8,11 +8,18 @@ public class EmailService : IEmailService
 {
     public async Task SendEmailAsync(EmailNotification emailNotification)
     {
-        IEmailTemplate emailTemplate = EmailTemplateFactory.Create(emailNotification);
-        Email email = await emailTemplate.GenerateAsync();
+        try
+        {
+            IEmailTemplate emailTemplate = EmailTemplateFactory.Create(emailNotification);
+            Email email = await emailTemplate.GenerateAsync();
 
-        // Simulação de envio de e-mail (substituir por implementação real)
-        Console.WriteLine($"Enviando e-mail para {email.To}: {email.Subject}");
-        Console.WriteLine($"Corpo do e-mail: {email.Body}");
+            // Simulação de envio de e-mail (substituir por implementação real)
+            Console.WriteLine($"Enviando e-mail para {email.To}: {email.Subject}");
+            Console.WriteLine($"Corpo do e-mail: {email.Body}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao enviar e-mail: {ex.Message}");
+        }
     }
 }

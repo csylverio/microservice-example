@@ -18,9 +18,9 @@ public class SmsNotificationWorker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation("SmsNotificationWorker running at: {time}", DateTimeOffset.Now);
-            await _smsNotificationConsumer.StartListeningAsync(stoppingToken);
+            // _logger.LogInformation("SmsNotificationWorker running at: {time}", DateTimeOffset.Now);
             await Task.Delay(10000, stoppingToken);
+            await _smsNotificationConsumer.StartListeningAsync(stoppingToken);
         }
     }
 }

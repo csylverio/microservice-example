@@ -16,4 +16,4 @@ WORKDIR /app
 COPY --from=build /app/out ./
 
 # Defina o comando para executar o serviço
-ENTRYPOINT ["dotnet", "NotificationService.dll"]
+ENTRYPOINT ["dotnet", "BankingSystem.Services.NotificationWorker.dll"]

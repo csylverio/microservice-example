@@ -17,9 +17,9 @@ public class EmailNotificationWorker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation("EmailNotificationWorker running at: {time}", DateTimeOffset.Now);
-            await _emailNotificationConsumer.StartListeningAsync(stoppingToken);
+            // _logger.LogInformation("EmailNotificationWorker running at: {time}", DateTimeOffset.Now);
             await Task.Delay(10000, stoppingToken);
+            await _emailNotificationConsumer.StartListeningAsync(stoppingToken);
         }
     }
 }

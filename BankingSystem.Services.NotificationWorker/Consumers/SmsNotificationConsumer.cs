@@ -22,7 +22,7 @@ public class SmsNotificationConsumer : ISmsNotificationConsumer
     {
         try
         {
-            var factory = new ConnectionFactory() { HostName = "127.0.0.1", UserName = "rabbitmq", Password = "102030", Port = 5672 };
+            var factory = new ConnectionFactory() { HostName = "rabbitmq", UserName = "rabbitmq", Password = "102030", Port = 5672 };
             using var connection = await factory.CreateConnectionAsync(stoppingToken);
             using var channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
 

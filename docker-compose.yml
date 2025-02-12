@@ -1,8 +1,7 @@
-version: '3.8'
-
 services:
   customer-service:
     container_name: customer-service
+    build: ./BankingSystem.Services.CustomerService
     image: csylverio/customer-service:latest
     ports:
       - "5001:5000"
@@ -16,6 +15,7 @@ services:
 
   account-service:
     container_name: account-service
+    build: ./BankingSystem.Services.AccountService
     image: csylverio/account-service:latest
     ports:
       - "5002:5000"
@@ -29,9 +29,8 @@ services:
 
   notification-worker:
     container_name: notification-worker
+    build: ./BankingSystem.Services.NotificationWorker
     image: csylverio/notification-worker:latest
-    ports:
-      - "5003:5000"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       RabbitMQ__HostName: rabbitmq
@@ -42,9 +41,10 @@ services:
 
   loan-service:
     container_name: loan-service
+    build: ./BankingSystem.Services.LoanService
     image: csylverio/loan-service:latest
     ports:
-      - "5004:5000"
+      - "5003:5000"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
     networks:
@@ -61,11 +61,10 @@ services:
       - app-network
 
   mongodb:
-    image: mongo:5.0
+    image: mongo:latest
     container_name: mongodb
     ports:
       - "27017:27017"
-    command: ["mongod", "--replSet", "rs0"]
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: 102030
